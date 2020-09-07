@@ -1,0 +1,48 @@
+//与上一题很像 却完全两个思维的题值得区分与学习
+/*
+基本思路:
+    显然状态只能从左 上两个方向转移而来
+    而求的又是总的最大值
+    dp[i][j] = max(dp[i-1][j],dp[i][j-1]) + w[i][j];
+*/
+
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+using namespace std;
+
+typedef long long LL;
+
+const int N = 110;
+int T;
+int n,m;
+int w[N][N];
+LL dp[N][N];
+
+int main(){
+    cin>>T;
+
+    while(T--){
+        int n,m;
+        cin>>n>>m;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+                cin>>w[i][j];
+        
+        dp[0][0] = w[0][0];
+
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++){
+                if(i==0 && j>0)
+                    dp[i][j] = dp[i][j-1] + w[i][j];
+                else if(i>0 && j==0)
+                    dp[i][j] = dp[i-1][j] + w[i][j];
+                else if(i>0 && j>0)
+                    dp[i][j] = max(dp[i-1][j],dp[i][j-1]) + w[i][j];
+            }
+
+            cout<< dp[n-1][m-1] << endl;
+    }
+
+    return 0;
+}
