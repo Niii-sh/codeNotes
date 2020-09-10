@@ -3,7 +3,8 @@
 最基本的DP 即斐波那契数列
 定义dp[] 
 dp[] = dp[i-1] + dp[i-2]
-
+c b a 
+  c  b
 由于这题N 较大 但是不用取模所以是高精度
 如果N 非常大 而且要取模那么应该用矩阵快速幂
 */
@@ -42,27 +43,33 @@ struct Node{
         tmp.nums = add(nums,t.nums);
         return tmp;
     }   
-}dp[N];
+};
 
 int main(){
     cin>>n;
-    //特殊情况需注意
     if(n==0){
         cout<<0;
         return 0;
     }
 
     
-    dp[1].nums.push_back(1);
-    dp[2].nums.push_back(2);
+    Node a,b;
+    a.nums.push_back(1);
+    b.nums.push_back(1);
 
-    for(int i=2;i<=n+1;i++){
-        Node tmp = dp[i-1] + dp[i-2];
-        dp[i] = tmp;
+    Node c;
+
+    for(int i=2;i<=n;i++){
+        c=a+b;
+        a=b;
+        b=c;
     }
 
-    for(int i=0;i<dp[n+1].nums.size();i++)
-        cout<<dp[n+1].nums[i];
+    if(n==1)
+        cout<<1;
+    else
+        for(int i=0;i<c.nums.size();i++)
+            cout<<c.nums[i];
 
     return 0;
 }
