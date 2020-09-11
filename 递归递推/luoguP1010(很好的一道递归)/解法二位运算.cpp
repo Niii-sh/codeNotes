@@ -29,7 +29,7 @@ void dfs(int u){
             break;
         default:
             for(int p=14;p>=0;p--){
-                if(u&(1<<p)){
+                if(u&(1<<p)){       //判断最高是否为1 即分解2(p)次
                     if(cur)
                         printf("+");
                     else
