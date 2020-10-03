@@ -1,6 +1,6 @@
 /*
 算是没有辜负自己的努力吧
-基本上是秒A了
+基本上是秒A了 DP分析也完全是按照01背包的来 也就不传了
 */
 #include<iostream>
 #include<algorithm>
