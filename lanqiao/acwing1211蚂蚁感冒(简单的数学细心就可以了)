@@ -1,0 +1,78 @@
+/*
+思路还是比较直观的分类讨论吧
+记第一个感冒的蚂蚁为x 
+1.x向左
+	则 x左边的向右的蚂蚁一定会被感染
+	如果x左边有向右的蚂蚁 那么 x右边向左的一定会被感染
+2.x向右
+	则x右边的 向左的蚂蚁一定会被感染
+	如果x右边有向左的蚂蚁 那么 x左边向右的蚂蚁一定会被感染 
+*/
+
+#include<iostream>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int N=110; 
+
+int x,distx;
+int a,dista;
+int n;
+
+int ltr;	//在x左边 向右的
+int ltl;	//在x左边 向左的 
+int rtl;	//在x右边 向左的 
+int rtr;	//在x右边 向右的 
+
+int main(){
+	cin>>n;
+	
+	cin>>x;
+	
+	distx=abs(x);
+	
+	for(int i=0;i<n-1;i++){
+		cin>>a;
+		dista = abs(a);
+		//在x左边 
+		if(dista<distx){
+			//向右 
+			if(a>0)
+				ltr++;
+			//向左
+			if(a<0)
+				ltl++; 
+		}
+		
+		//在x右边 
+		if(dista>distx){
+			//向右 
+			if(a>0)
+				rtr++;
+			//向左
+			if(a<0)
+				rtl++; 
+		}
+	}
+	
+	int ans=1;
+	
+	//x向左 
+	if(x<0){
+		ans+=ltr;
+		if(ltr)
+			ans+=rtl;
+	}
+	else if(x>0){
+		ans+=rtl;
+		if(rtl)
+			ans+=ltr;
+	}
+	
+	//cout<<ltl<<' '<<ltr<<' '<<rtl<<' '<<rtr<<endl;
+	
+	cout<<ans<<endl;
+	
+	return 0;
+} 
