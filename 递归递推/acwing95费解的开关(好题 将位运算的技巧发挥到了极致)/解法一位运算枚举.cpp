@@ -17,6 +17,8 @@ void turn(int x,int y){
     for(int i=0;i<5;i++){
         int a = x+dx[i];
         int b = y+dy[i];
+        //字符0 和 1 的二进制ASCII码只差一个1(注意是字符0 1 ！！)
+        //所以想要转换两者状态只需要异或一下即可
         if(a<0||a>=5||b<0||b>=5)
             continue;
         g[a][b]^=1;
