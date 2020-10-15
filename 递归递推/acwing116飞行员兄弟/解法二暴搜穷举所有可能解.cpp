@@ -1,3 +1,13 @@
+/*
+思路还是比较明确的
+两道题做下来 我有一定信心再碰到这种题应该也能一次性A掉
+需要注意的是memcpy的使用顺序
+每次开始循环前都先将g 的值 复制到backup中 memcpy(backup,g,sizeof g)
+                每次结束循环后还原 将backup值复制到g中 memcpy(g,backup,sizeof backup)
+然后需要注意的是:
+在turn_all的过程中
+事实上中间的i,j点被turn了两次 一定要注意最后的是再turn一次
+*/
 #include <iostream>
 #include <algorithm>
 #include <cstring>
