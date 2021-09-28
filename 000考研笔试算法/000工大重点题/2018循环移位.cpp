@@ -19,7 +19,7 @@
 using namespace std;
 
 //n表示a的长度 k表示需要循环右移的位数 
-int rCycleShift(int a[],int n,int k){
+void rCycleShift(int a[],int n,int k){
     int *bk = new int[k];
     int i,m;
     for(int i=0;i<n;i++)
