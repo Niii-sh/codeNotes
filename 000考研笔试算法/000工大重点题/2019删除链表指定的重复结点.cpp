@@ -3,7 +3,8 @@
     如传入45 但原链表中有多个45 就将多余的删掉使得链表里中只有一个45
     基本思路双指针
     第一个指针p找到一个存在的key
-    而后第二个指针q从p开始走如果p->next为重复值则直接删除
+    然后第二个指针q=p->next 
+    如果q->nodeValue==key 则删除即p=p=->next->next;
 */
 #include<iostream>
 #include<algorithm>
