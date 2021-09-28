@@ -33,15 +33,30 @@ void rCycleShift(int a[],int n,int k){
         else    //会溢出则将其填补到右边 其应该属于的位置
             a[i+m-n]=bk[i]; //i+m-n 反过来的话就是负了 显然不对
     }
-    
-    for_each(a,a+n,[](int i){
-        cout<<i<<' ';
-    });
-    
-    cout<<endl;
+
     
     delete []bk;
 }
+
+void lCycleShift(int a[],int n,int k){
+    int *bk=new int[n];
+    
+    for(int i=0;i<n;i++){
+        bk[i]=a[i];
+    }
+    
+    int m=n%k;
+    
+    for(int i=0;i<n-m;i++)
+        a[i]=bk[i+n-m-1];
+    
+    for(int i=n-m,j=0;i<n;i++)
+        a[i]=bk[j++];
+
+    
+    delete []bk;
+}
+
 
 int main(){
     int n;
@@ -53,7 +68,7 @@ int main(){
           cin>>a[i];     
     }
     
-    rCycleShift(a,n,3);
+    lCycleShift(a,n,3);
     
     return 0;
 }
