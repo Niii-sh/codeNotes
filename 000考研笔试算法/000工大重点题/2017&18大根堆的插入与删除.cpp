@@ -92,3 +92,74 @@ int main(){
     
     return 0;
 }
+
+
+/*
+    简化版 
+    按照我自己的理解写了一下似乎就满简单的 不知道为什么网上的代码要搞得这么复杂
+    堆的基本操作 插入与删除
+    关键是了解 其基本步骤
+    然后就是考验代码能力了 此处以大根堆为例
+    插入: 先将元素加在最后最后一个位置然后自下而上进行调整
+    删除: 将堆元素用最后一个元素取代 自上而下进行调整
+*/
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1E5+10;
+
+int heap[N];    //为了方便操作 堆初始下标为1
+int n;  //表示heap的当前长度
+
+void insert(int heap[],int&n,int item){
+    n++;
+    heap[n]=item;
+    for(int i=n;i/2>=1;i--){    
+        int u=i/2;
+        if(heap[i]>heap[u]){
+            swap(heap[i],heap[u]);
+        }
+    }
+}
+
+void dele(int heap[],int&n){
+    heap[1]=heap[n];
+    n--;
+    for(int i=1;i<=n;i++){
+        int u=i;
+        if(i*2<=n&&heap[i*2]>heap[i])
+            u=i*2;
+        if(i*2+1<=n&&heap[i*2]>heap[u])
+            u=i*2+1;
+        swap(heap[u],heap[i]);
+    }
+    
+}
+
+void traverse(int heap[],int n){
+    for(int i=1;i<=n;i++)
+        printf("%d ",heap[i]);
+    puts("");
+}
+
+int main(){
+    int x=5;
+    
+    for(int i=0;i<x;i++){
+        int num;
+        cin>>num;
+        insert(heap,n,num);
+        puts("插入后的结果为:");
+        traverse(heap,n);
+    }
+    
+    for(int i=0;i<2;i++){
+        dele(heap,n);
+        puts("删除后的结果为:");
+        traverse(heap,n);
+    }   
+    
+    return 0;
+}
