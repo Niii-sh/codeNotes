@@ -95,73 +95,92 @@ int main(){
 
 
 /*
-    简化版 
-    按照我自己的理解写了一下似乎就满简单的 不知道为什么网上的代码要搞得这么复杂
-    这样的话只能做到符合最基本的堆的性质 也就是根肯定大于左右 
-    但不是堆排序 输出的序列并不是有序的 但顶点肯定是最大值或最小值既符合堆的定义 且每次操作后仍然符合
-    堆的基本操作 插入与删除
-    关键是了解 其基本步骤
-    然后就是考验代码能力了 此处以大根堆为例
-    插入: 先将元素加在最后最后一个位置然后自下而上进行调整
-    删除: 将堆元素用最后一个元素取代 自上而下进行调整
+    堆排序:
+    迭代模拟版
+    以小根堆为例
+    非常慢 但好在比较好理解吧 完全是模拟堆排序手算思路写的
+    重点在于关于swap的过程 这里很容易弄错
 */
 #include<iostream>
 #include<algorithm>
-
+#include<vector>
+#include<cstdio>
 using namespace std;
 
 const int N=1E5+10;
+int heap[N];    //堆 序号从1开始
+int len;    //堆当前的长度
 
-int heap[N];    //为了方便操作 堆初始下标为1
-int n;  //表示heap的当前长度
+void traverse(int heap[],int len){
+    for(int i=1;i<=len;i++)
+        printf("%d ",heap[i]);
+    cout<<endl;
+}
 
-void insert(int heap[],int&n,int item){
-    n++;
-    heap[n]=item;
-    for(int i=n;i/2>=1;i--){    
-        int u=i/2;
-        if(heap[i]>heap[u]){
-            swap(heap[i],heap[u]);
+//堆的插入 自底向上进行调整
+//注意调整需要对非终端结点进行调整 由非终端结点与其两个孩子相比较
+void heapPush(int heap[],int&len,int item){
+    heap[++len]=item;
+    for(int i=len/2;i>=1;i--){
+        int u = i;
+        if(i*2<=len&&heap[u]>heap[i*2]){
+            u=2*i;
         }
+        if(i*2+1<=len&&heap[u]>heap[i*2+1]){
+            u=2*i+1;
+        }
+        if(u!=i)
+            swap(heap[u],heap[i]);
+    
+     
     }
 }
 
-void dele(int heap[],int&n){
-    heap[1]=heap[n];
-    n--;
-    for(int i=1;i<=n;i++){
-        int u=i;
-        if(i*2<=n&&heap[i*2]>heap[i])
-            u=i*2;
-        if(i*2+1<=n&&heap[i*2]>heap[u])
-            u=i*2+1;
-        swap(heap[u],heap[i]);
+//堆的删除
+//将堆顶元素的值由最后一个元素替代
+//然后自顶向下调整
+void heapPop(int heap[],int&len){
+    heap[1]=heap[len--];
+    for(int i=1;i*2<=len;i++){
+        int u = i;
+        if(i*2<=len&&heap[u]>heap[i*2]){
+            u=2*i;
+        }
+        if(i*2+1<=len&&heap[u]>heap[i*2+1]){
+            u=2*i+1;
+        }
+        if(u!=i)
+            swap(heap[u],heap[i]);
+
+     
+    }
+}
+
+//完整来说 先将原数组建队
+//然后每次出堆堆顶元素
+//本题比较特殊需要传入弹出前n元素 所以传入一个m
+void heapSort(int heap[],int&len,vector<int> q,int m){
+    for(int i=0;i<q.size();i++){
+        heapPush(heap,len,q[i]);
     }
     
-}
-
-void traverse(int heap[],int n){
-    for(int i=1;i<=n;i++)
-        printf("%d ",heap[i]);
-    puts("");
+    for(int i=0;i<m;i++){
+        printf("%d ",heap[1]);
+        heapPop(heap,len);
+    }
 }
 
 int main(){
-    int x=5;
-    
-    for(int i=0;i<x;i++){
-        int num;
-        cin>>num;
-        insert(heap,n,num);
-        puts("插入后的结果为:");
-        traverse(heap,n);
+    vector<int>q;
+    int n,m;
+    scanf("%d%d",&n,&m);
+    for(int i=0;i<n;i++){
+        int x;
+        scanf("%d",&x);
+        q.push_back(x);
     }
     
-    for(int i=0;i<2;i++){
-        dele(heap,n);
-        puts("删除后的结果为:");
-        traverse(heap,n);
-    }   
+    heapSort(heap,len,q,m);
     
     return 0;
 }
