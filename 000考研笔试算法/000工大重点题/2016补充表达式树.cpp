@@ -31,6 +31,7 @@ public:
     }
     
     string expressionTree(TreeNode* root) {
+        //主要是为了防止生成最外层的括号 不然最外层会多夹了一个括号
         return dfs(root->left)+root->val+dfs(root->right);
     }
 };
