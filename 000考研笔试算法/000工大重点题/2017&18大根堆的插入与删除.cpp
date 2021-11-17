@@ -7,180 +7,88 @@
     基本思路:
         将堆末端元素赋值给堆顶
         然后自上而下对堆进行调整
-    以大根堆为例
+*/
+/*
+    本题以小根堆为例
+    核心还是在down的这个过程中
+    不过为了考试的看起来更规范 还是将该操作分离出来 写为heapAdjust
+    然后使用在插入 和 删除过程中
+    慢了一些 但是目前 是调整最为适合考试的版本
 */
 #include<iostream>
 #include<algorithm>
+#include<cstring>
 using namespace std;
 
-const int N=1E5+10;
-int heap[N];
+const int N = 1E5+10;
 
-void siftUp(int nodeIndex){
-    bool flag=false;    //用来标记是否需要上调
-    if(nodeIndex==1)    //已经调制堆顶则不需要继续上调
-        return;
-    
-    while(!flag&&nodeIndex>1){
-        int parentIndex = nodeIndex/2;
-        if(heap[nodeIndex]>heap[parentIndex]){
-            swap(heap[nodeIndex],heap[parentIndex]);
-            nodeIndex/=2;
-        }
-        else
-            flag=1; //该结点小于其父结点符合堆的定义不需要继续上调
-    }
-    
-}
+int heap[N]; // 堆
 
-void siftDown(int heapSize){
-    int i=1;    //从1开始调整
-    int tmp=0;          //parent结点应该与左右两个孩子中更大的孩子进行交换
-    int len = heapSize-1;
-    while(i*2<=len){
-        tmp = i;
-        if(heap[i]>heap[i*2])
-            tmp = i*2;
-        if(i*2+1<=len)
-            if(heap[i*2+1]>heap[i*2])
-                tmp= i*2+1;
-        if(tmp!=i)
-            swap(heap[i],heap[tmp]);
-        i++;
-    }
-    
-}
-
-void insertion(int &heapSize,int data){
-    heapSize++;
-    heap[heapSize-1]=data;
-    siftUp(heapSize-1);
-}
-
-void deletion(int &heapSize){
-    heap[1]=heap[heapSize-1];
-    heapSize--;
-    siftDown(heapSize);
-}
-
-void showHeap(int heapSize){
-    for(int i=1;i<=heapSize-1;i++)
+void traverse(int heap[],int len){
+    for(int i=1;i<=len;i++)
         cout<<heap[i]<<' ';
     cout<<endl;
 }
 
-
-int main(){
-    int heapSize=1;    //表示堆的初始大小
-    int n;
-    cin>>n;
+//现在看来还是这个递归的算法最为精彩
+//u表示当前结点所在的位置 len表示堆的长度
+void heapAdjust(int heap[],int u,int len){
+    int t=u;
+    //左子树存在 且值小于根
+    if(u*2<=len&&heap[2*u]<heap[t])
+        t=2*u;
     
-    for(int i=1;i<=n;i++){
-        int v;
-        cin>>v;
-        insertion(heapSize,v);
+    //右子树存在 且值大于根
+    //用t是因为 根要满足比左右子树都小 所以是比较两次 
+    //还是比较巧妙的这里面的设计 
+    if(u*2+1<=len&&heap[2*u+1]<heap[t])
+        t=2*u+1;
+    
+    //证明当前结点不符合 根的定义
+    //故进行交换 同时下继续进行调整
+    if(u!=t){
+        swap(heap[u],heap[t]);
+        heapAdjust(heap,t,len);
     }
     
-    showHeap(heapSize);
-    deletion(heapSize);
-    showHeap(heapSize);
-    insertion(heapSize,99);
-    showHeap(heapSize);
-    deletion(heapSize);
-    showHeap(heapSize);
-    
-    
-    return 0;
 }
 
-
-/*
-    堆排序:
-    迭代模拟版
-    以小根堆为例
-    非常慢 但好在比较好理解吧 完全是模拟堆排序手算思路写的
-    重点在于关于swap的过程 这里很容易弄错
-*/
-#include<iostream>
-#include<algorithm>
-#include<vector>
-#include<cstdio>
-using namespace std;
-
-const int N=1E5+10;
-int heap[N];    //堆 序号从1开始
-int len;    //堆当前的长度
-
-void traverse(int heap[],int len){
-    for(int i=1;i<=len;i++)
-        printf("%d ",heap[i]);
-    cout<<endl;
+//有了heapAdjust后其余两个操作就很好办了
+void insert(int heap[],int &len,int data){
+    len++;
+    heap[len]=data;
+    for(int i=len/2;i;i--)
+        heapAdjust(heap,i,len);
+    //traverse(heap,len);
 }
 
-//堆的插入 自底向上进行调整
-//注意调整需要对非终端结点进行调整 由非终端结点与其两个孩子相比较
-void heapPush(int heap[],int&len,int item){
-    heap[++len]=item;
-    for(int i=len/2;i>=1;i--){
-        int u = i;
-        if(i*2<=len&&heap[u]>heap[i*2]){
-            u=2*i;
-        }
-        if(i*2+1<=len&&heap[u]>heap[i*2+1]){
-            u=2*i+1;
-        }
-        if(u!=i)
-            swap(heap[u],heap[i]);
-    
-     
-    }
-}
-
-//堆的删除
-//将堆顶元素的值由最后一个元素替代
-//然后自顶向下调整
-void heapPop(int heap[],int&len){
-    heap[1]=heap[len--];
-    for(int i=1;i*2<=len;i++){
-        int u = i;
-        if(i*2<=len&&heap[u]>heap[i*2]){
-            u=2*i;
-        }
-        if(i*2+1<=len&&heap[u]>heap[i*2+1]){
-            u=2*i+1;
-        }
-        if(u!=i)
-            swap(heap[u],heap[i]);
-
-     
-    }
-}
-
-//完整来说 先将原数组建队
-//然后每次出堆堆顶元素
-//本题比较特殊需要传入弹出前n元素 所以传入一个m
-void heapSort(int heap[],int&len,vector<int> q,int m){
-    for(int i=0;i<q.size();i++){
-        heapPush(heap,len,q[i]);
-    }
-    
-    for(int i=0;i<m;i++){
-        printf("%d ",heap[1]);
-        heapPop(heap,len);
-    }
+void pop(int heap[],int &len){
+    heap[1]=heap[len];
+    heapAdjust(heap,1,len);//从顶点开始调整
+    len--;
 }
 
 int main(){
-    vector<int>q;
     int n,m;
-    scanf("%d%d",&n,&m);
+    cin>>n>>m;
+    
+    int len=0;
+    
+    memset(heap,0x3f,sizeof heap);//由于是小根堆 所以将堆初始化为最大
+    
     for(int i=0;i<n;i++){
         int x;
-        scanf("%d",&x);
-        q.push_back(x);
+        cin>>x;
+        insert(heap,len,x);
     }
     
-    heapSort(heap,len,q,m);
+    //排序
+    
+    for(int i=0;i<m;i++){
+        cout<<heap[1]<<' ';
+        pop(heap,len);
+    }
+    
     
     return 0;
 }
