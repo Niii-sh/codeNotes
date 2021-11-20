@@ -8,49 +8,41 @@
         因为每趟确定的是最大元素 如果i也从大到小的话 
         那么前面的元素就是位置未确定的
 */
-
+/*
+    冒泡排序优化
+*/
 #include<iostream>
+#include<cstdio>
 #include<algorithm>
 #include<vector>
 using namespace std;
 
+const int N=1E5+10;
 
-void bobSort(vector<int>&q){
-    int n = q.size();
-    
-    for(int i=n-1;i>0;i--){
-        bool flag = false;
+void show(vector<int>&q){
+    for(int i=0;i<q.size();i++)
+        cout<<q[i]<<' ';
+    cout<<endl;
+}
+
+void bubbleSort(vector<int>&q){
+    for(int i=q.size()-1;i>=0;i--){
+        bool flag=false;
         for(int j=0;j<i;j++){
-            if(q[j+1]<q[j]){
+            if(q[j]>q[j+1]){
+                swap(q[j],q[j+1]);
                 flag=true;
-                swap(q[j+1],q[j]);
             }
+            if(!flag)
+                return;
+            show(q);
         }
-        
-        for_each(q.begin(),q.end(),[](int v){
-            cout<<v<<' ';
-        });
-        cout<<endl;
-            
-        if(!flag)
-            return;
     }
-    
 }
 
 int main(){
-    vector<int>q;
-    
-    int n;
-    cin>>n;
-    
-    for(int i=0;i<n;i++){
-        int v;
-        cin>>v;
-        q.push_back(v);
-    }
-    
-    bobSort(q);
+    vector<int>q = vector<int>{3,2,1,5,4};
+    bubbleSort(q);
     
     return 0;
 }
