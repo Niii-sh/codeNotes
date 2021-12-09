@@ -1,5 +1,5 @@
 /*
-    工大这题 和acwing149合并果子本质一毛一样
+    工大这题 和acwing148合并果子本质一毛一样
     就是哈夫曼树的应用就是会写最小的stl即可
     priority_queue<int,vector<int>,greater<int>>    为小根堆
     C++ 默认的priority_queue为大根堆
